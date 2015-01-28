@@ -3,6 +3,7 @@ package com.izv.android.proyectoinmobiliaria;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.LoaderManager;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
@@ -142,7 +143,8 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
                 return true;
 
             case R.id.elimiar:
-                eliminar(index);
+                delete(index);
+                //eliminar(index);
                 ad.notifyDataSetChanged();
 
                 return true;
@@ -196,9 +198,9 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
                     precio = ven.getString("precio");
 
 
-                    gi.insert(new Vendedor(direccion, tipo, precio ,0));
+                    insert(direccion, tipo, precio);
 
-                    mostrarInmuebles();
+                    select();
                     ad.notifyDataSetChanged();
                     tostada(getString(R.string.msgAnadir));
                     break;
@@ -263,10 +265,10 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
 
                     public void onClick(DialogInterface dialog, int whichButton) {
 
-                        Vendedor vNuevo = new Vendedor(Integer.parseInt("" + et4.getText()), et1.getText().toString(), et3.getText().toString(), Double.parseDouble(et2.getText().toString()),0);
+                        //Vendedor vNuevo = new Vendedor(Integer.parseInt("" + et4.getText()), et1.getText().toString(), et3.getText().toString(), Double.parseDouble(et2.getText().toString()),0);
 
-
-                        gi.update(vNuevo);
+                        update(Integer.parseInt("" + et4.getText()), et1.getText().toString(), et3.getText().toString(), et2.getText().toString());
+                        //gi.update(vNuevo);
 
                         ad.notifyDataSetChanged();
                         tostada(getString(R.string.msgEditar));
@@ -466,11 +468,42 @@ public class MainActivity extends Activity implements LoaderManager.LoaderCallba
 
 
     /*--------------------------------------*/
-    /*------    OPERACIONES CRUD       -----*/
+    /*------    OPERACIONES BD       -----*/
     /*--------------------------------------*/
 
-    public void select(View v){
+    public void select(){
+        gi = new GestorInmobiliaria(this);
+        gi.open();
+        adaptador = new Adaptador(this, null);
+        lv.setAdapter(adaptador);
+        getLoaderManager().initLoader(0, null, this);
+    }
 
+    public void insert (String direccion, String tipo, String precio) {
+        Uri uri = Contrato.TablaInm.CONTENT_URI;
+        ContentValues valores = new ContentValues();
+        valores.put(Contrato.TablaInm.DIRECCION, direccion);
+        valores.put(Contrato.TablaInm.TIPO, tipo);
+        valores.put(Contrato.TablaInm.PRECIO, precio);
+        Uri u = getContentResolver().insert(uri, valores);
+    }
+
+    public void  update (int id, String direccion, String tipo, String precio){
+        Uri uri = Contrato.TablaInm.CONTENT_URI;
+        ContentValues valores = new ContentValues();
+        valores.put(Contrato.TablaInm.DIRECCION, direccion);
+        valores.put(Contrato.TablaInm.TIPO, tipo);
+        valores.put(Contrato.TablaInm.PRECIO, precio);
+        String[] args = new String[]{id + ""};
+        int i = getContentResolver().update(uri, valores, "_ID ="+id, null);
+    }
+
+    public void delete (int index){
+        Cursor vv = (Cursor)lv.getItemAtPosition(index);
+        int id = vv.getInt(0);
+
+        Uri uri= Contrato.TablaInm.CONTENT_URI;
+        int i = getContentResolver().delete(uri, "_ID ="+id, null);
     }
 
 }

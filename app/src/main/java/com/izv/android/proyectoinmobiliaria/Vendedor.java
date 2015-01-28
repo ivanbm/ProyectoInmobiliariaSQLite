@@ -6,32 +6,20 @@ import java.io.Serializable;
  * Created by Ivan on 29/11/2014.
  */
 public class Vendedor implements Serializable, Comparable<Vendedor> {
-    private int id, subido;
+    private int id;
+    double precio;
     private String direccion, tipo;
-    private double precio;
 
 
     public Vendedor(){
-        this(0, "", "", 0.0,0);
+        this(0, "", "", 0.);
     }
 
-    public Vendedor(int id, String direccion, String tipo, double precio, int subido) {
+    public Vendedor(int id, String direccion, String tipo, double precio) {
         this.id = id;
         this.direccion = direccion;
         this.tipo = tipo;
         this.precio = precio;
-        this.subido = subido;
-    }
-
-    public Vendedor(String direccion, String tipo, String precio, int subido) {
-        this.direccion = direccion;
-        this.tipo = tipo;
-        try{
-            this.precio = Double.parseDouble(precio);
-        }catch (NumberFormatException e){
-            this.precio = 0.0;
-        }
-        this.subido = subido;
     }
 
     public Vendedor(String direccion, String tipo, String precio) {
@@ -43,6 +31,7 @@ public class Vendedor implements Serializable, Comparable<Vendedor> {
             this.precio = 0.0;
         }
     }
+
 
     public int getId() {
         return id;
@@ -76,13 +65,6 @@ public class Vendedor implements Serializable, Comparable<Vendedor> {
         this.precio = precio;
     }
 
-    public int getSubido() {
-        return subido;
-    }
-
-    public void setSubido(int subido) {
-        this.subido = subido;
-    }
 
     @Override
     public boolean equals(Object o) {

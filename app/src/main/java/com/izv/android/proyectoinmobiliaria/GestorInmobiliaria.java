@@ -45,7 +45,6 @@ public class GestorInmobiliaria {
         valores.put(Contrato.TablaInm.DIRECCION, objeto.getDireccion());
         valores.put(Contrato.TablaInm.TIPO, objeto.getTipo());
         valores.put(Contrato.TablaInm.PRECIO, objeto.getPrecio());
-        valores.put(Contrato.TablaInm.SUBIDO, objeto.getSubido());
         String condicion = Contrato.TablaInm._ID + " = ?";
         String[] argumentos = { objeto.getId() + "" };
         int cuenta = bd.update(Contrato.TablaInm.TABLA, valores, condicion, argumentos);
@@ -60,7 +59,7 @@ public class GestorInmobiliaria {
     }
 
     public int delete(int id){
-        return delete(new Vendedor(id,null,null,0,0));
+        return delete(new Vendedor(id,null,null,0));
     }
 
     public List<Vendedor> select(String condicion, String[] parametros, String orden) {
@@ -105,7 +104,6 @@ public class GestorInmobiliaria {
         objeto.setDireccion(c.getString(1));
         objeto.setTipo(c.getString(2));
         objeto.setPrecio(c.getDouble(3));
-        objeto.setSubido(c.getInt(4));
         return objeto;
     }
 
